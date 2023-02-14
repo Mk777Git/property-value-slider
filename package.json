@@ -1,0 +1,13 @@
+{
+  "name": "property-value-slider",
+  "version": "1.0.0",
+  "decription": "",
+  "main": "index.js",
+  "keywords": [
+    "HTML",
+    "CustomElement"
+  ],
+  "author": "mk777 <bwv777@mk777.de> (https://@mk777.de)",
+  "license": "MIT",
+  "description": "HTML custom element. Insert a Slider to manipulate an object property value"
+}
