@@ -133,3 +133,5 @@ export default class ContentSlider extends HTMLElement {
     return
   }
 }
+
+customElements.define("content-slider", ContentSlider);
