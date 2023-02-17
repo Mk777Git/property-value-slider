@@ -4,10 +4,10 @@ Creates a HTML custom element. In the Element is a slider. With this slider you 
 ## params
 ### destId (string)
 Id of the HTMLElement with the property to be changed. Element has to be in normal DOM not shadow
-### destPropertyName (string)
+### destPropName (string)
 Name of the property to be changed. 
-### destPropertyUnit (string)
-The unit of the property value. It is added to the destPropertyName. If the unit is 'contentLength', the slider adds random word. In this case the slider value is the count of chars.
+### destPropUnit (string)
+The unit of the property value. It is added to the destPropName. If the unit is 'contentLength', the slider adds random word. In this case the slider value is the count of chars.
 
 ### showNr
 If exists two numbers are insert right to the slider. The first shows the current value. The second the max value.
