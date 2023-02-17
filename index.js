@@ -27,6 +27,11 @@ export default class propValSlider extends HTMLElement {
     this.numberPosition = this.getAttribute('pos') == null ? 'right' : this.getAttribute('pos');
     this.destPropertyName = this.getAttribute('destPropName');
     this.destPropertyUnit = this.getAttribute('destPropUnit') === null ? '' : this.getAttribute('destPropUnit');
+    if (this.destPropertyUnit === "contentLength") {
+      if (!this.destPropertyName) {
+        this.destPropertyName = "textContent";
+      }
+    }
   }
 
   createFrame() {
@@ -122,13 +127,12 @@ export default class propValSlider extends HTMLElement {
       el[propertyPath] = value;
       return;
     }
-    let objReturn = el;
     let arr = propertyPath.split('.');  // bis auf das letzte abschneiden!
     for (let i = 0; i < arr.length - 1; i++) {
-      objReturn = objReturn[arr[i]];
+      el = el[arr[i]];
     }
     console.log(arr[arr.length - 1])
-    objReturn[arr[arr.length - 1]] = value;
+    el[arr[arr.length - 1]] = value;
     return
   }
 }
