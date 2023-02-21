@@ -7,9 +7,12 @@
     "HTML",
     "CustomElement"
   ],
+  "files": [
+    "index.js",
+    "README.md",
+    "demo.html"
+  ],
   "author": "mk777 <bwv777@mk777.de> (https://@mk777.de)",
   "license": "MIT",
-  "description": "HTML custom element. Insert a Slider to manipulate an object property value",
-  "dependencies": {
-  }
+  "description": "HTML custom element. Insert a Slider to manipulate an object property value"
 }

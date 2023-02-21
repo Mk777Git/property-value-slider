@@ -11,12 +11,15 @@ The unit of the property value. It is added to the destPropName. If the unit is 
 
 ### showNr
 If exists two numbers are insert right to the slider. The first shows the current value. The second the max value.
+A click on this numbers open an Dialog zu change the value.  
 
 ### min (integer)
 The min value the slider returns
+Standard: 1
 
 ### max (integer)
 The max value the slider returns
+Standard: 100
 
 ### startValue (integer)
 The start value for the property. This value is set once at the beginning.

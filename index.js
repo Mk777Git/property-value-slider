@@ -5,6 +5,16 @@ export default class propValSlider extends HTMLElement {
 		super();
 		this.getParameter();
 		const sRoot = this.attachShadow({ mode: 'open' })
+		this.dlgMax = this.createDlg(sRoot, 'max', () => {
+			const el = this.dlgMax.querySelector('#txtInput')
+			this.setInfoMax(sRoot, el.value);
+			this.dlgMax.close();
+		});
+		this.dlgMin = this.createDlg(sRoot, 'min', () => {
+			const el = this.dlgMax.querySelector('#txtInput')
+			this.setInfoMin(sRoot, el.value);
+			this.dlgMax.close();
+		});
 		const slider = this.createSlider();
 		const frame = this.createFrame(this.label);
 		frame.appendChild(slider)
@@ -50,7 +60,7 @@ export default class propValSlider extends HTMLElement {
 		const frame = document.createElement('div');
 		frame.style.display = 'grid';
 		if (labelText) {
-			frame.style.gridTemplateColumns = 'minmax(10em, max-content)	 1fr auto';
+			frame.style.gridTemplateColumns = 'minmax(10em, max-content) 1fr max-content';
 			frame.appendChild(this.createLabel(labelText))
 		} else {
 			frame.style.gridTemplateColumns = '1fr auto';
@@ -71,6 +81,7 @@ export default class propValSlider extends HTMLElement {
 
 	createSlider() {
 		const slider = document.createElement('input');
+		slider.id = 'slider'
 		slider.type = 'range';
 		slider.min = this.min;
 		slider.max = this.max;
@@ -98,7 +109,6 @@ export default class propValSlider extends HTMLElement {
 			el = el[arr[i]];
 		}
 		console.log(el[arr[arr.length - 1]]);
-		console.log(typeof el);
 		if (el instanceof CSSStyleDeclaration) {
 			const compStyle = window.getComputedStyle(document.getElementById(this.destId));
 			return compStyle[arr[arr.length - 1]]
@@ -109,27 +119,62 @@ export default class propValSlider extends HTMLElement {
 
 	createInfo(slider) {
 		// zwei Elemente: current + max
-		const elNrMax = this.createInfoFragment(this.max, 3);
-		const elNrCur = this.createInfoFragment(this.startValue, 1);
-		const elCut = this.createInfoFragment('/', 2);
+		const elNrMax = this.createInfoFragment(this.max, 3, 'infoMax');
+		const elNrCur = this.createInfoFragment(this.startValue, 1, 'infoCur');
+		const elCut = this.createInfoFragment('/', 2, 'infoCut');
 		elCut.style.textAlign = 'center';
 		elNrCur.style.textAlign = 'right';
 		const grid = document.createElement('span');
 		grid.style.display = 'grid';
-		grid.style.gridTemplateColumns = '3fr 1fr 3fr';
+		grid.style.gridTemplateColumns = 'max-content max-content max-content';
 		grid.style.paddingLeft = '.3em';
-		//grid.style.position = 'relative';
-		//grid.style.top = "0em"
 		grid.gridColumnStart = '2';
-		slider.addEventListener('input', this.refreshNumber(elNrCur))
+		slider.addEventListener('input', this.refreshNumber(elNrCur));
+		elNrCur.addEventListener('click', this.showDlgMin);
+		elNrMax.addEventListener('click', this.showDlgMax);
 		grid.appendChild(elNrCur);
 		grid.appendChild(elCut);
 		grid.appendChild(elNrMax);
 		return grid;
 	}
 
-	createInfoFragment(textContent, gridTempCol) {
-		const el = document.createElement('span');
+	showDlgMax = (ev) => {
+		this.showDlg(ev, this.dlgMax)
+	}
+
+	showDlgMin = (ev) => {
+		this.showDlg(ev, this.dlgMin)
+	}
+
+	showDlg = (ev, dlg) => {
+		dlg.style.visibility = 'hidden';
+		dlg.show();
+		const rect = dlg.getBoundingClientRect();
+		dlg.style.left = `${ev.clientX - rect.width}px`;
+		dlg.style.top = `${ev.clientY}px`;
+		dlg.style.visibility = 'visible';
+	}
+
+
+	setInfoMax = (sRoot, val) => {
+		const elMax = sRoot.querySelector('#infoMax');
+		this.max = val;
+		const slider = sRoot.querySelector('#slider');
+		slider.max = val;
+		elMax.textContent = val;
+	}
+
+	setInfoMin = (sRoot, val) => {
+		const elMin = sRoot.querySelector('#infoMin');
+		this.min = val;
+		const slider = sRoot.querySelector('#slider');
+		slider.min = val;
+		elMax.textContent = val;
+	}
+
+	createInfoFragment(textContent, gridTempCol, id) {
+		const el = document.createElement('div');
+		el.id = id;
 		if (textContent) {
 			el.textContent = textContent;
 		}
@@ -137,7 +182,6 @@ export default class propValSlider extends HTMLElement {
 		el.setAttribute('part', 'info');
 		return el;
 	}
-
 
 	refreshNumber(el) {
 		return function (ev) {
@@ -185,6 +229,94 @@ export default class propValSlider extends HTMLElement {
 		el[arr[arr.length - 1]] = value;
 		return
 	}
+
+	createDlg(sRoot, type, callback) {
+
+		let dlg = document.createElement('dialog');
+		dlg.style.position = 'absolute';
+		dlg.style.height = 'min-content';
+		dlg.style.zIndex = 999;
+		dlg.style.margin = '0px';
+		dlg.style.paddingTop = '0.3em'
+		dlg.style.backgroundColor = 'blanchedalmond';
+
+
+		let grid = document.createElement('div');
+		grid.style.display = 'grid'
+		grid.style.gridTemplateColumns = 'min-content fit-content(400px)';
+		grid.style.gridTemplateRows = 'auto auto auto';
+		grid.style.gap = '0.5em';
+		grid.style.padding = '0em';
+		grid.style.alignItems = 'center';
+
+		const divCaption = document.createElement('div');
+		if (type === 'min') {
+			divCaption.textContent = 'Set the minimum range';
+		} else {
+			divCaption.textContent = 'Set the maximum range';
+		}
+		divCaption.textContent += ' for ' + this.destId;
+		divCaption.style.paddingBottom = '0.2em';
+		divCaption.style.marginBottom = '0.3em';
+		divCaption.style.gridRow = '1';
+		divCaption.style.gridColumn = '1/4';
+		divCaption.style.textAlign = 'center';
+		divCaption.style.borderBottom = '1px black solid';
+		grid.appendChild(divCaption);
+
+		const label = document.createElement('label');
+		if (this.destPropertyUnit === 'contentLength') {
+			label.innerText = 'content length'
+		} else {
+			label.innerText = `${this.destPropertyName} (${this.destPropertyUnit})`
+		}
+		label.style.alignSelf = 'start';
+		label.style.gridRow = '2/4';
+		label.style.gridColumn = '1';
+		grid.appendChild(label);
+
+		const divInput = document.createElement('div');
+		divInput.style.display = 'flex';
+		divInput.style.gridRow = "2";
+		divInput.style.gridColumn = "2"
+		const textBox = document.createElement('input');
+		textBox.type = 'text';
+		textBox.value = type === 'min' ? this.min : this.max;
+		textBox.id = 'txtInput';
+		divInput.appendChild(textBox);
+
+		grid.appendChild(divInput);
+
+		const flexButtons = document.createElement('div');
+		flexButtons.style.display = 'flex';
+		flexButtons.style.flexFlow = 'nowrap';
+		flexButtons.style.gridRow = "3";
+		flexButtons.style.gridColumn = "2";
+		flexButtons.style.marginTop = "0.3em";
+		const btnCancel = document.createElement('input');
+		btnCancel.type = 'button';
+		btnCancel.value = 'cancel'
+		btnCancel.style.width = '50%';
+		btnCancel.style.marginRight = '0.3em';
+		btnCancel.addEventListener("click", () => { dlg.close() });
+
+
+		const btnOk = document.createElement('input');
+		btnOk.value = 'ok'
+		btnOk.type = 'button';
+		btnOk.style.width = '50%';
+		btnOk.style.autofocus = true;
+		btnOk.addEventListener("click", callback);
+		// Buttons umgekehrt einfügen, da flex-direction: row-reverse;
+		flexButtons.appendChild(btnCancel);
+		flexButtons.appendChild(btnOk);
+
+		grid.appendChild(flexButtons);
+		dlg.appendChild(grid);
+		return sRoot.appendChild(dlg);
+	}
 }
+
+
 
 customElements.define("prop-val-slider", propValSlider);
