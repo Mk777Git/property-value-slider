@@ -1,6 +1,6 @@
-export default class propValSlider extends HTMLElement {
-	content = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, quas quidem! Dolorem cum pariatur officia, reiciendis sit dolore quam at odit. Mollitia porro recusandae nulla delectus quidem laborum tenetur adipisci impedit voluptate nesciunt ea vitae, incidunt error, possimus eius debitis placeat doloremque tempore dolore deserunt eligendi? Corporis eaque consequatur, eveniet iure omnis dolore, repudiandae iusto vitae perferendis aliquam dolor perspiciatis facere temporibus. Illo obcaecati et doloribus culpa molestiae voluptatibus praesentium aspernatur asperiores perferendis minus expedita adipisci, nam provident ipsum quibusdam ullam harum sint dolore fuga, explicabo error nostrum? Eveniet, officia. Vitae voluptate porro officiis quo, aperiam, incidunt quis impedit assumenda rem, optio officia hic dolore quasi possimus quod nam nostrum nobis inventore? Quo soluta voluptatem accusantium molestiae perferendis distinctio sunt quisquam ex quae numquam atque odio, ea id libero, placeat nesciunt laboriosam natus iusto neque, repellat eveniet quasi est. Et quae error nihil ipsum corrupti nobis saepe atque fugit quasi, velit fugiat minus dolore ex. Libero placeat unde eaque officia asperiores expedita nemo tenetur in tempore ex dolores sapiente, voluptates nulla omnis numquam fugiat eligendi nihil reiciendis autem sunt vitae. Perferendis quam provident saepe assumenda consectetur numquam eligendi ad ducimus ab nostrum beatae quo aspernatur odio magni eum nobis recusandae, dolor at voluptas placeat velit maxime exercitationem maiores eos. Deleniti debitis dolor ea natus quis culpa fugiat. Ab quod autem quis id expedita, iure velit assumenda provident accusamus similique a cupiditate veniam doloremque accusantium ipsum repellat explicabo vero dignissimos commodi. Voluptatum sequi beatae asperiores omnis, mollitia in modi eligendi suscipit, voluptas, saepe nesciunt perferendis dignissimos quos repudiandae reiciendis ullam quas tempore consequuntur vero ut? Dolore autem sunt doloremque commodi necessitatibus harum? Ex odit reiciendis corrupti dolorum iusto exercitationem ducimus sapiente consectetur nulla nam, pariatur, enim laboriosam velit rem accusamus nobis? Amet placeat voluptatem officiis consequatur necessitatibus dolore aut modi dicta quod error veniam iusto minus tempore quis ducimus qui rerum porro reprehenderit sint, itaque non? Hic assumenda aspernatur vero veritatis magnam? Dolore, cupiditate omnis impedit quod soluta error ad rerum accusamus rem harum odio autem, vero sapiente totam maxime illum eius ipsum voluptatem recusandae aspernatur molestiae amet quos? Nobis repellendus id, reprehenderit dolorem iste vitae sapiente rem quod minima? Delectus distinctio eius unde dignissimos asperiores corrupti aliquam, dolor consectetur ab doloribus natus vitae itaque adipisci quibusdam hic necessitatibus deleniti reiciendis maxime, quis neque nobis voluptas sit ipsam? Officia beatae asperiores totam accusantium sapiente dolores ipsa quos obcaecati rem soluta ex cum accusamus, labore temporibus nesciunt nam incidunt provident? Minima accusantium laboriosam, quam mollitia est vitae vero voluptatem perspiciatis quaerat magni commodi, vel nisi. Qui placeat, harum, ullam dolor numquam architecto alias amet, ad ipsa aspernatur voluptas. Nesciunt quam porro asperiores perspiciatis natus nobis consectetur aut quibusdam facilis similique hic vel in, error laudantium ut. Ratione quo aliquam unde alias mollitia dolores animi, est deserunt architecto ipsam, fuga, optio corporis facere eius perspiciatis consequuntur quibusdam qui quas doloremque culpa officiis beatae error exercitationem iste. Laborum quos optio dolorem ex soluta, quo dolor nesciunt sapiente officia suscipit in tempore modi! Quo, obcaecati?'
 
+
+export default class propValSlider extends HTMLElement {
 	constructor() {
 		super();
 		this.getParameter();
@@ -32,11 +32,15 @@ export default class propValSlider extends HTMLElement {
 		this.destId = this.getAttribute('destId');
 		this.showNr = this.getAttribute('showNr') == null ? false : true;
 		this.startValue = this.getAttribute('startValue');
-		this.min = this.getAttribute('min');
-		this.max = this.getAttribute('max');
+		this.min = this.getAttribute('min') == null ? 1 : this.getAttribute('min');
+		this.max = this.getAttribute('max') == null ? 1 : this.getAttribute('max');
 		this.numberPosition = this.getAttribute('pos') == null ? 'right' : this.getAttribute('pos');
 		this.destPropertyName = this.getAttribute('destPropName');
 		this.destPropertyUnit = this.getAttribute('destPropUnit') === null ? '' : this.getAttribute('destPropUnit');
+		this.sameContent = false;
+		if (this.getAttribute('sameContent') === 'true') {
+			this.sameContent = true;
+		}
 		if (this.destPropertyUnit === "contentLength") {
 			if (!this.destPropertyName) {
 				this.destPropertyName = "textContent";
@@ -190,7 +194,20 @@ export default class propValSlider extends HTMLElement {
 	}
 
 	contentGenerator = (length) => {
-		return this.content.substring(0, length);
+		if (!this.lorem) {
+			this.lorem = new Lorem();
+		}
+		if (this.sameContent) {
+			if (!this.content) {
+				this.content = this.lorem.getText(this.max);
+			}
+			if (length > this.content.length) {
+				this.content += this.lorem.getText(length - this.content.length);
+			}
+			return this.content.substring(0, length);
+		} else {
+			return this.lorem.getText(length);
+		}
 	}
 
 
@@ -317,6 +334,27 @@ export default class propValSlider extends HTMLElement {
 	}
 }
 
+export class Lorem {
+	words = ["ad", "adipisicing", "aliqua", "aliquip", "amet", "anim", "aute", "cillum", "commodo", "consectetur", "consequat", "culpa", "cupidatat", "deserunt", "do", "dolor", "dolore", "duis", "ea", "eiusmod", "elit", "enim", "esse", "est", "et", "eu", "ex", "excepteur", "exercitation", "fugiat", "id", "in", "incididunt", "ipsum", "irure", "labore", "laboris", "laborum", "Lorem", "magna", "minim", "mollit", "nisi", "non", "nostrud", "nulla", "occaecat", "officia", "pariatur", "proident", "qui", "quis", "reprehenderit", "sint", "sit", "sunt", "tempor", "ullamco", "ut", "velit", "veniam", "voluptate"];
+	// 6.596774193548387 ist die durchschnittliche Worlänge;
+	static magicNumber = 7;
+	constructor() {
+		this.countWords = this.words.length;
+	}
 
+	getText(length) {
+		let result = ''
+		while (result.length < length) {
+			result += this.words[this.generateRandomInteger(0, this.countWords)] + ' ';
+		}
+		return result;
+	}
+
+	generateRandomInteger(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+	}
+}
 
 customElements.define("prop-val-slider", propValSlider);

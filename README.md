@@ -24,6 +24,12 @@ Standard: 100
 ### startValue (integer)
 The start value for the property. This value is set once at the beginning.
 
+### sameContent 
+Is only relevant, if the parameter destPropUnit = "contentLength".
+In this case without the parameter a random LOREM is created to fill the content. 
+So every time you change the lenght you get a new Text.
+If the parameter "sameContent" exists or the value is 'true', then is will be allways the same Text.
+
 ## Example
 ```html
 <content-slider 
