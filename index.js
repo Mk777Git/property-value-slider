@@ -37,9 +37,10 @@ export default class propValSlider extends HTMLElement {
 		this.numberPosition = this.getAttribute('pos') == null ? 'right' : this.getAttribute('pos');
 		this.destPropertyName = this.getAttribute('destPropName');
 		this.destPropertyUnit = this.getAttribute('destPropUnit') === null ? '' : this.getAttribute('destPropUnit');
-		this.sameContent = false;
-		if (this.getAttribute('sameContent') === 'true') {
-			this.sameContent = true;
+		this.newContent = false;
+		if (this.getAttribute('newContent') != null) {
+			if (this.getAttribute('newContent') == 'true' || this.getAttribute('newContent') == '')
+				this.newContent = true;
 		}
 		if (this.destPropertyUnit === "contentLength") {
 			if (!this.destPropertyName) {
@@ -197,7 +198,9 @@ export default class propValSlider extends HTMLElement {
 		if (!this.lorem) {
 			this.lorem = new Lorem();
 		}
-		if (this.sameContent) {
+		if (this.newContent) {
+			return this.lorem.getText(length);
+		} else {
 			if (!this.content) {
 				this.content = this.lorem.getText(this.max);
 			}
@@ -205,8 +208,6 @@ export default class propValSlider extends HTMLElement {
 				this.content += this.lorem.getText(length - this.content.length);
 			}
 			return this.content.substring(0, length);
-		} else {
-			return this.lorem.getText(length);
 		}
 	}
 

@@ -24,11 +24,11 @@ Standard: 100
 ### startValue (integer)
 The start value for the property. This value is set once at the beginning.
 
-### sameContent 
+### newContent 
 Is only relevant, if the parameter destPropUnit = "contentLength".
-In this case without the parameter a random LOREM is created to fill the content. 
+Without this parameter a fix LOREM text ist created at startup. 
+If the parameter "newContent" is set, every time you change the size of the content a new random LOREM is created to fill the content. 
 So every time you change the lenght you get a new Text.
-If the parameter "sameContent" exists or the value is 'true', then is will be allways the same Text.
 
 ### hideLabel
 Without this Parameter a label is draw on the left side of the slider. It will show the "destId"."destPropName" ("destPropUnit").
