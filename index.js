@@ -18,7 +18,7 @@ export default class propValSlider extends HTMLElement {
 		const slider = this.createSlider();
 		const frame = this.createFrame(this.label);
 		frame.appendChild(slider)
-		if (this.showNr) {
+		if (!this.hideNr) {
 			const info = this.createInfo(slider);
 			frame.appendChild(info);
 		}
@@ -30,7 +30,7 @@ export default class propValSlider extends HTMLElement {
 
 	getParameter() {
 		this.destId = this.getAttribute('destId');
-		this.showNr = this.getAttribute('showNr') == null ? false : true;
+		this.hideNr = this.getAttribute('hideNr') == null ? false : true;
 		this.startValue = this.getAttribute('startValue');
 		this.min = this.getAttribute('min') == null ? 1 : this.getAttribute('min');
 		this.max = this.getAttribute('max') == null ? 1 : this.getAttribute('max');
@@ -47,7 +47,7 @@ export default class propValSlider extends HTMLElement {
 			}
 		}
 		let label;
-		if (this.getAttribute('label') != null) {
+		if (this.getAttribute('hideLabel') != null) {
 			if (this.destPropertyUnit === "contentLength") {
 				label = `${this.destId}.${this.destPropertyName}`;
 			} else {

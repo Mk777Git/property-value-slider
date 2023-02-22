@@ -9,9 +9,9 @@ Name of the property to be changed.
 ### destPropUnit (string)
 The unit of the property value. It is added to the destPropName. If the unit is 'contentLength', the slider adds random word. In this case the slider value is the count of chars.
 
-### showNr
-If exists two numbers are insert right to the slider. The first shows the current value. The second the max value.
-A click on this numbers open an Dialog zu change the value.  
+### hideNr
+Without this Parameter two numbers are insert right to the slider. The first shows the current value. The second the max value.
+A click on this numbers open an Dialog zu change the value. If "hideNr" is set, then the numbers are not apear and you can't change the min/max values on the fly. This parameter is new in 1.0.5. Before the parameter "showNr" exists.  
 
 ### min (integer)
 The min value the slider returns
@@ -30,6 +30,9 @@ In this case without the parameter a random LOREM is created to fill the content
 So every time you change the lenght you get a new Text.
 If the parameter "sameContent" exists or the value is 'true', then is will be allways the same Text.
 
+### hideLabel
+Without this Parameter a label is draw on the left side of the slider. It will show the "destId"."destPropName" ("destPropUnit").
+
 ## Example
 ```html
 <content-slider 
@@ -37,7 +40,7 @@ If the parameter "sameContent" exists or the value is 'true', then is will be al
     destId="div-test" 
     destPropertyName="style.fontSize" 
     destPropertyUnit="px"
-    showNr min="1" 
+    min="1" 
     max="40" 
     startValue="14">
 </content-slider>
